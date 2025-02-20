@@ -1,7 +1,9 @@
 import ast
+import copy
 import csv
 import random
 
+# Correct Implementation
 
 def insertion_sort(array):
     index = 1
@@ -14,7 +16,6 @@ def insertion_sort(array):
             current_position -= 1
         index += 1
     return array
-
 
 def binary_search(key, array):
     left = 0
@@ -30,12 +31,128 @@ def binary_search(key, array):
 
     return array[mid] == key
 
-
 def binary_sort_search_member(key, array):
     sorted_array = insertion_sort(array)
     # print(sorted_array)
     return binary_search(key, sorted_array)
+
+# Six implementations with error
+
+# Errors in sorting part
+
+def insertion_sort_with_error_1(array):
+    " We iterate up to  len(array)-1 instead of len(array)"
+    index = 1
+    while index < len(array)-1: # error
+        current_position = index
+        while (current_position > 0) and (array[current_position] < array[current_position - 1]):
+            temp = array[current_position]
+            array[current_position] = array[current_position - 1]
+            array[current_position - 1] = temp
+            current_position -= 1
+        index += 1
+    return array
+
+def insertion_sort_with_error_2(array):
+    """
+    Here we don't use a temp variable before mutating the items
+    """
+    index = 1
+    while index < len(array):
+        current_position = index
+        while (current_position > 0) and (array[current_position] < array[current_position - 1]):
+            array[current_position] = array[current_position - 1] 
+            array[current_position - 1] = array[current_position] # error
+            current_position -= 1
+        index += 1
+    return array
+
+def insertion_sort_with_error_3(array):
+    """
+    The error is doing the index increase too early
+    """
+    index = 1
+    while index < len(array)-1: # error
+        index += 1 # error
+        current_position = index
+        while (current_position > 0) and (array[current_position] < array[current_position - 1]):
+            temp = array[current_position]
+            array[current_position] = array[current_position - 1]
+            array[current_position - 1] = temp
+            current_position -= 1
+        
+    return array
+
+def binary_search_with_error_1(key, array):
+    """
+    In this faulty implementation  we start the right variable from len(array) -2 
+    instead of len(array) - 1
+    """
+    left = 0
+    right = len(array) - 2 # error
+    mid = (left + right) // 2
+
+    while array[mid] != key and left <= right:
+        if array[mid] < key:
+            left = mid + 1
+        else:
+            right = mid - 1
+        mid = (left + right) // 2
+
+    return array[mid] == key
+
+def binary_search_with_error_2(key, array):
+    """
+    In this faulty implementation  we introduce two errors
+    """
+    left = 0
+    right = len(array) - 2 # error 
+    mid = (left + right) // 2
+
+    while array[mid] != key and left <= right:
+        if array[mid] < key:
+            left = mid + 2 # error
+        else:
+            right = mid - 2 # error
+        mid = (left + right) // 2
+
+    return array[mid] == key
+
+# Six errors in binary_sort_search_member
+
+def binary_sort_search_member_error_1(key, array):
+    sorted_array = insertion_sort(array)
+    # print(sorted_array)
+    return binary_search_with_error_1(key, sorted_array)
+
+def binary_sort_search_member_error_2(key, array):
+    sorted_array = insertion_sort_with_error_1(array)
+    # print(sorted_array)
+    return binary_search(key, sorted_array)
+
+def binary_sort_search_member_error_3(key, array):
+    sorted_array = insertion_sort_with_error_2(array)
+    # print(sorted_array)
+    return binary_search(key, sorted_array)
     
+def binary_sort_search_member_error_4(key, array):
+    sorted_array = insertion_sort_with_error_3(array)
+    # print(sorted_array)
+    return binary_search(key, sorted_array)
+
+def binary_sort_search_member_error_5(key, array):
+    sorted_array = insertion_sort(array)
+    # print(sorted_array)
+    return binary_search_with_error_2(key, sorted_array)
+
+def binary_sort_search_member_error_6(key, array):
+    """
+    Integration error case
+    """
+    sorted_array = insertion_sort(copy.copy(array))
+    # print(sorted_array)
+    return binary_search_with_error_2(key, array)
+
 def test():
     print(insertion_sort([5, 3, 8, 4, 2]) == [2, 3, 4, 5, 8])
     print(insertion_sort([1]) == [1])
@@ -79,7 +196,7 @@ def random_test_generator(N, num_test_cases):
     and the key as the second variable
     """
     test_cases = []
-    value_range = [-50, 50]
+    value_range = [-30, 30]
     for i in range(num_test_cases):
         array = random.choices(range(value_range[0], value_range[1] + 1), k=N)
         key = random.choice(range(value_range[0], value_range[1] + 1))
@@ -96,14 +213,14 @@ def create_random_test_cases(N, num_test_cases):
     save_test_cases_to_csv(test_cases, filename="random_tests.csv")
 
 
-def run_tests(test_cases):
+def run_tests(test_cases, func_to_test):
     num_cases = 0
     num_failed_cases = 0 
     for t in test_cases:
         array = t[0]
         key = t[1]
         expected_result = t[2]
-        actual_result = binary_sort_search_member(key, array)
+        actual_result = func_to_test(key, array)
         num_cases+=1
         if expected_result != actual_result:
             num_failed_cases+=1
@@ -114,6 +231,14 @@ num_test_cases = 1000
 N=5
 # create_random_test_cases(N, num_test_cases)
 test_cases = read_test_cases_from_csv()
-num_cases, num_failed_cases = run_tests(test_cases)
+# num_cases, num_failed_cases = run_tests(test_cases, binary_sort_search_member_error_1)
+# num_cases, num_failed_cases = run_tests(test_cases, binary_sort_search_member_error_2)
+# num_cases, num_failed_cases = run_tests(test_cases, binary_sort_search_member_error_3)
+# num_cases, num_failed_cases = run_tests(test_cases, binary_sort_search_member_error_4)
+# num_cases, num_failed_cases = run_tests(test_cases, binary_sort_search_member_error_5)
+num_cases, num_failed_cases = run_tests(test_cases, binary_sort_search_member_error_6)
+
+
+
 print(f"Num cases: {num_cases}")
 print(f"Num failed cases: {num_failed_cases}")
