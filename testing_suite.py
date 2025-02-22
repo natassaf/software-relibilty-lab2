@@ -32,18 +32,26 @@ def generate_pairwise_test_cases(num_elements, lowest, highest):
     
     # random_index = random.randint(0, len(original_values)-1)
     # search_key = original_values[random_index]
+    array = original_values
     search_key = random.choice(range(lowest, highest))
-
-    expected_result = True
-    test_cases.append((original_values, search_key, expected_result))
+    expected_result = 0
+    for item in array:
+        if search_key == item:
+            expected_result=1
+            break
+    test_cases.append((array, search_key, expected_result))
     
     for i in range(num_elements):
         new_test_case = original_values[:i] + [mutated_values[i]] + original_values[i+1:]
         # random_index = random.randint(0, len(new_test_case)-1)
         # search_key = new_test_case[random_index]
         search_key = random.choice(range(lowest, highest))
-
-        test_cases.append((new_test_case, search_key, True))
+        expected_result = 0
+        for item in new_test_case:
+            if search_key == item:
+                expected_result=1
+                break
+        test_cases.append((new_test_case, search_key, expected_result))
     
     for i in range(num_elements):
         for j in range(i + 1, num_elements):
@@ -56,8 +64,12 @@ def generate_pairwise_test_cases(num_elements, lowest, highest):
             # random_index = random.randint(0, len(new_test_case)-1)
             # search_key = new_test_case[random_index]
             search_key = random.choice(range(lowest, highest))
-
-            test_cases.append((new_test_case, search_key, True))
+            expected_result = 0
+            for item in new_test_case:
+                if search_key == item:
+                    expected_result=1
+                    break
+            test_cases.append((new_test_case, search_key, expected_result))
     
     
     return test_cases
@@ -100,8 +112,10 @@ def random_test_generator(num_elements, lowest_value, highest_value):
 def run_check(test_case, func)->bool:
     array = test_case[0]
     key = test_case[1]
-    expected_result = test_case[2]
+    expected_result = bool(test_case[2])
     result = func(key, array)
+    if expected_result==True and result == False:
+        print(expected_result, result)
     found_error = True if (result != expected_result) else False
     return found_error
     
