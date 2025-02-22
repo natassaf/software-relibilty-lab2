@@ -51,6 +51,7 @@ def generate_pairwise_test_cases(num_elements, lowest, highest):
             )
             new_test_case = original_values[:i] + [mutated_values[i]] + original_values[i+1:]
             random_index = random.randint(0, len(new_test_case)-1)
+            search_key = new_test_case[random_index]
             test_cases.append((new_test_case, search_key, True))
     
     
@@ -189,8 +190,8 @@ def run_experiment(N, lowest_value, highest_value):
 
 
 
-lowest_value = -1000
-highest_value = 1000
+lowest_value = -10000
+highest_value = 10000
 N = 20
 
 num_cases_random, num_cases_pairwise = run_experiment(N, lowest_value, highest_value)
