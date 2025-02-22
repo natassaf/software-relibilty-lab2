@@ -30,15 +30,18 @@ def generate_pairwise_test_cases(num_elements, lowest, highest):
             new_value = random.randint(lowest, highest)
         mutated_values.append(new_value)
     
-    random_index = random.randint(0, len(original_values)-1)
-    search_key = original_values[random_index]
+    # random_index = random.randint(0, len(original_values)-1)
+    # search_key = original_values[random_index]
+    search_key = random.choice(range(lowest, highest))
+
     expected_result = True
     test_cases.append((original_values, search_key, expected_result))
     
     for i in range(num_elements):
         new_test_case = original_values[:i] + [mutated_values[i]] + original_values[i+1:]
-        random_index = random.randint(0, len(new_test_case)-1)
-        search_key = new_test_case[random_index]
+        # random_index = random.randint(0, len(new_test_case)-1)
+        # search_key = new_test_case[random_index]
+        search_key = random.choice(range(lowest, highest))
 
         test_cases.append((new_test_case, search_key, True))
     
@@ -50,8 +53,10 @@ def generate_pairwise_test_cases(num_elements, lowest, highest):
                 original_values[j+1:]
             )
             new_test_case = original_values[:i] + [mutated_values[i]] + original_values[i+1:]
-            random_index = random.randint(0, len(new_test_case)-1)
-            search_key = new_test_case[random_index]
+            # random_index = random.randint(0, len(new_test_case)-1)
+            # search_key = new_test_case[random_index]
+            search_key = random.choice(range(lowest, highest))
+
             test_cases.append((new_test_case, search_key, True))
     
     
@@ -97,7 +102,7 @@ def run_check(test_case, func)->bool:
     key = test_case[1]
     expected_result = test_case[2]
     result = func(key, array)
-    found_error = True  if (result != expected_result) else False
+    found_error = True if (result != expected_result) else False
     return found_error
     
 
@@ -160,7 +165,6 @@ def run_experiment(N, lowest_value, highest_value):
 
         test_cases_random.append(test_case)
         flag_random = flag_error_1_random & flag_error_2_random & flag_error_3_random & flag_error_4_random & flag_error_5_random & flag_error_6_random
-        flag_random = flag_error_1_random & flag_error_2_random & flag_error_3_random
         i += 1
         if i % 10000 == 0:
             print_status_random()
