@@ -18,6 +18,9 @@ from utils import save_test_cases_to_csv
 #     print(binary_sort_search_member(4, [5, 3, 8, 4, 2]) == True)
 #     print(binary_sort_search_member(10, [1, 2, 3, 4, 5]) == False)
 
+def pick_search_key(lowest_value, highest_value):
+    search_key = random.choice(range(lowest_value, highest_value))
+    return search_key
 
 def generate_pairwise_test_cases(num_elements, lowest, highest):
     original_values = [random.randint(lowest, highest) for _ in range(num_elements)]
@@ -33,7 +36,7 @@ def generate_pairwise_test_cases(num_elements, lowest, highest):
     # random_index = random.randint(0, len(original_values)-1)
     # search_key = original_values[random_index]
     array = original_values
-    search_key = random.choice(range(lowest, highest))
+    search_key = pick_search_key(lowest, highest)
     expected_result = 0
     for item in array:
         if search_key == item:
@@ -45,7 +48,7 @@ def generate_pairwise_test_cases(num_elements, lowest, highest):
         new_test_case = original_values[:i] + [mutated_values[i]] + original_values[i+1:]
         # random_index = random.randint(0, len(new_test_case)-1)
         # search_key = new_test_case[random_index]
-        search_key = random.choice(range(lowest, highest))
+        search_key = pick_search_key(lowest, highest)
         expected_result = 0
         for item in new_test_case:
             if search_key == item:
@@ -63,7 +66,7 @@ def generate_pairwise_test_cases(num_elements, lowest, highest):
             new_test_case = original_values[:i] + [mutated_values[i]] + original_values[i+1:]
             # random_index = random.randint(0, len(new_test_case)-1)
             # search_key = new_test_case[random_index]
-            search_key = random.choice(range(lowest, highest))
+            search_key = pick_search_key(lowest, highest)
             expected_result = 0
             for item in new_test_case:
                 if search_key == item:
@@ -82,7 +85,7 @@ def random_test_generator(num_elements, lowest_value, highest_value):
     value_range = [lowest_value, highest_value]
 
     array = random.choices(range(value_range[0], value_range[1] + 1), k=num_elements)
-    key = random.choice(range(value_range[0], value_range[1] + 1))
+    key = pick_search_key(lowest_value, highest_value)
     expected_result = 0
     for item in array:
         if key == item:
@@ -220,8 +223,8 @@ pairwise_gen_results = []
 
 check_error_1 = False
 check_error_2 = False
-check_error_3 = False
-check_error_4 = True
+check_error_3 = True
+check_error_4 = False
 check_error_5 = False
 check_error_6 = False
 
