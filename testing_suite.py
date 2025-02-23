@@ -164,36 +164,8 @@ def run_experiment(N, lowest_value, highest_value, check_error_1, check_error_2,
     flag_error_6_random  = False if check_error_6 else True
     flag_error_6_pairwise  = False if check_error_6 else True
 
-    # Initialization
-    # flag_error_1_random = False
-    flag_error_2_random = False
-    # flag_error_3_random = False
-    # flag_error_4_random = False
-    # flag_error_5_random = False
-    # flag_error_6_random = False
-
-    flag_error_1_random = True
-    # flag_error_2_random = True
-    flag_error_3_random = True
-    flag_error_4_random = True
-    flag_error_5_random = True
-    flag_error_6_random = True
-
-    # flag_error_1_pairwise = False
-    flag_error_2_pairwise = False
-    # flag_error_3_pairwise = False
-    # flag_error_4_pairwise = False
-    # flag_error_5_pairwise = False
-    # flag_error_6_pairwise = False
-    flag_error_1_pairwise = True
-    # flag_error_2_pairwise = True
-    flag_error_3_pairwise = True
-    flag_error_4_pairwise = True
-    flag_error_5_pairwise = True
-    flag_error_6_pairwise = True
-
-    flag_random = False
-    flag_pairwise = False
+    flag_random = flag_error_1_random & flag_error_2_random & flag_error_3_random & flag_error_4_random & flag_error_5_random & flag_error_6_random
+    flag_pairwise = flag_error_1_pairwise & flag_error_2_pairwise & flag_error_3_pairwise & flag_error_4_pairwise & flag_error_5_pairwise & flag_error_6_pairwise
 
     # # Running experiment
     test_cases_random = []
@@ -211,8 +183,8 @@ def run_experiment(N, lowest_value, highest_value, check_error_1, check_error_2,
         test_cases_random.append(test_case)
         flag_random = flag_error_1_random & flag_error_2_random & flag_error_3_random & flag_error_4_random & flag_error_5_random & flag_error_6_random
         i += 1
-        if i % 10000 == 0:
-            print_status_random()
+        # if i % 10000 == 0:
+        #     print_status_random()
 
     test_cases_pairwise = []
     i = 0
@@ -231,8 +203,8 @@ def run_experiment(N, lowest_value, highest_value, check_error_1, check_error_2,
         test_cases_pairwise.extend(test_cases)
         flag_pairwise = flag_error_1_pairwise & flag_error_2_pairwise & flag_error_3_pairwise & flag_error_4_pairwise & flag_error_5_pairwise & flag_error_6_pairwise
         i += 1
-        if i % 10000 == 0:
-            print_status_pairwise()
+        # if i % 10000 == 0:
+        #     print_status_pairwise()
     save_test_cases_to_csv(test_cases_random, filename="random_tests.csv")
     save_test_cases_to_csv(test_cases_pairwise, filename="pairwise_tests.csv")
     return (len(test_cases_random), len(test_cases_pairwise))
@@ -264,4 +236,4 @@ for i in range(10):
 print(f"Num elements is {N}")
 print(f"Values' range in the array is: {[lowest_value, highest_value]}")
 print(f"Average cases random: {np.mean(random_gen_results)}")
-print(f"Num cases pairwise: {min(pairwise_gen_results)}")
+print(f"Num cases pairwise min value: {min(pairwise_gen_results)}")
